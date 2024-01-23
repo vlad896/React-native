@@ -1,12 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import { ScrollView, StyleSheet, Text, FlatList, View } from 'react-native';
-import { Navbar } from './app/Navbar';
-import { AddTodo } from './app/AddTodo';
+
+import { StyleSheet, View } from 'react-native';
+import { Navbar } from './app/components/Navbar';
+
 import { useState } from 'react';
-import { Todo } from './app/Todo';
+
+import { MainScreen } from './app/screens/MainScreen';
+import { TodoScreen } from './app/screens/TodoScreen';
 
 export default function App() {
-	const [todos, setTodos] = useState([]);
+	const [todos, setTodos] = useState([
+		{ id: '1', title: 'Выучить React Native' },
+		{ id: '2', title: 'Написать приложение' }
+	])
+	const [todoId, setTodoId] = useState(null)
 
 	const addTodo = (title) => {
 		// const newTodo = {
@@ -30,22 +36,17 @@ export default function App() {
 	const removeTodo = id => {
 		setTodos(prev => prev.filter(todo => todo.id !== id))
 	}
+
+
 	return (
 		<View>
 			<Navbar title='ToDo App' />
 			<View style={styles.container}>
-				<AddTodo onSubmit={addTodo} />
-
-				<FlatList
-					keyExtractor={item => item.id.toString()}
-					data={todos}
-					renderItem={({ item }) => (<Todo todo={item} onRemove={removeTodo} />)
-
-					}
-				/>
-				{/* <ScrollView >
-					{todos.map(todo => (<Todo key={todo.id} todo={todo} />))}
-				</ScrollView> */}
+				{todoId !== null
+					? <TodoScreen goBack={() => setTodoId(null)} todo={todos.find(todo => todo.id === todoId)} />
+					: <MainScreen onSubmit={addTodo} todos={todos} onRemove={removeTodo} onOpen={(id) => {
+						setTodoId(id)
+					}} />}
 			</View>
 		</View>
 	);
