@@ -58,6 +58,15 @@ export default function App() {
     );
   };
 
+  const updateTodo = (id,title) =>{
+	setTodos(old=>old.map(todo=>{
+		if(todo.id===id){
+			todo.title=title
+		}
+		return todo
+	}))	
+  }
+
   return (
     <View>
       <Navbar title="ToDo App" />
@@ -67,6 +76,7 @@ export default function App() {
             goBack={() => setTodoId(null)}
             onRemove={removeTodo}
             todo={todos.find((todo) => todo.id === todoId)}
+			onSave={updateTodo}
           />
         ) : (
           <MainScreen
