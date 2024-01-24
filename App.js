@@ -12,7 +12,7 @@ export default function App() {
 		{ id: '1', title: 'Выучить React Native' },
 		{ id: '2', title: 'Написать приложение' }
 	])
-	const [todoId, setTodoId] = useState(null)
+	const [todoId, setTodoId] = useState('2')
 
 	const addTodo = (title) => {
 		// const newTodo = {
@@ -43,7 +43,7 @@ export default function App() {
 			<Navbar title='ToDo App' />
 			<View style={styles.container}>
 				{todoId !== null
-					? <TodoScreen goBack={() => setTodoId(null)} todo={todos.find(todo => todo.id === todoId)} />
+					? <TodoScreen goBack={() => setTodoId(null)} onRemove={removeTodo} todo={todos.find(todo => todo.id === todoId)} />
 					: <MainScreen onSubmit={addTodo} todos={todos} onRemove={removeTodo} onOpen={(id) => {
 						setTodoId(id)
 					}} />}
