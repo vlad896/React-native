@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { View, StyleSheet, TextInput, Alert, Keyboard } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
 
 export const AddTodo = ({ onSubmit }) => {
@@ -8,6 +8,7 @@ export const AddTodo = ({ onSubmit }) => {
 		if (value.trim()) {
 			onSubmit(value)
 			setValue('')
+			Keyboard.dismiss()
 		} else {
 			Alert.alert('error')
 		}
