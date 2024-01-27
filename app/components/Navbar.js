@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { AppText } from '../ui/AppText';
 
 export const Navbar = (props) => {
 	return (
 		<View style={styles.navbar}>
-			<Text style={styles.text}>{props.title}</Text>
+			<AppText style={styles.text}>{props.title}</AppText>
 		</View>
 	)
 }

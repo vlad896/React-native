@@ -4,7 +4,6 @@ import { useFonts } from 'expo-font';
 import { Navbar } from "./app/components/Navbar";
 import * as SplashScreen from 'expo-splash-screen'
 import { useCallback, useEffect, useState } from "react";
-import { AppLoading } from 'expo'
 import { MainScreen } from "./app/screens/MainScreen";
 import { TodoScreen } from "./app/screens/TodoScreen";
 
