@@ -1,19 +1,14 @@
 import { StyleSheet, View, Alert } from "react-native";
 import * as Font from 'expo-font'
+import { useFonts } from 'expo-font';
 import { Navbar } from "./app/components/Navbar";
-
-import { useState } from "react";
-
+import * as SplashScreen from 'expo-splash-screen'
+import { useCallback, useEffect, useState } from "react";
+import { AppLoading } from 'expo'
 import { MainScreen } from "./app/screens/MainScreen";
 import { TodoScreen } from "./app/screens/TodoScreen";
 
-async function loadApplication() {
-	await Font.loadAsync({
-		'roboto-regular': require('./assets/Fonts/Roboto-Regular.ttf'),
-		'roboto-bold': require('./assets/Fonts/Roboto-Bold.ttf')
-	})
-}
-
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
 	const [todos, setTodos] = useState([
@@ -21,20 +16,21 @@ export default function App() {
 		{ id: "2", title: "Написать приложение" },
 	]);
 	const [todoId, setTodoId] = useState(null);
+	const [fontsLoaded, fonstError] = useFonts({
+		'roboto-regular': require('./assets/Fonts/Roboto-Regular.ttf'),
+		'roboto-bold': require('./assets/Fonts/Roboto-Bold.ttf')
+	})
 
+	const onLoyoutRootView = useCallback(async () => {
+		if (fontsLoaded || fonstError) {
+			await SplashScreen.hideAsync();
+		}
+	}, [fontsLoaded, fonstError]);
+
+	if (!fontsLoaded && !fonstError) {
+		return null
+	}
 	const addTodo = (title) => {
-		// const newTodo = {
-		// 	id: Date.now().toString(),
-		// 	title: title
-		// }
-
-		// setTodos((preTodos) => {
-		// 	return [
-		// 		...preTodos,
-		// 		newTodo
-		// 	]
-		// })
-
 		setTodos((prev) => [
 			...prev,
 			{
@@ -77,7 +73,7 @@ export default function App() {
 	}
 
 	return (
-		<View>
+		<View onLayout={onLoyoutRootView}>
 			<Navbar title="ToDo App" />
 			<View style={styles.container}>
 				{todoId !== null ? (
@@ -108,3 +104,50 @@ const styles = StyleSheet.create({
 		paddingVertical: 20,
 	},
 });
+
+
+
+
+// const newTodo = {
+// 	id: Date.now().toString(),
+// 	title: title
+// }
+
+// setTodos((preTodos) => {
+// 	return [
+// 		...preTodos,
+// 		newTodo
+// 	]
+// })
+
+
+//const [loading, setLoading] = useState(false)
+// async function loadApplication() {
+// 	await Font.loadAsync({
+// 		'roboto-regular': require('./assets/Fonts/Roboto-Regular.ttf'),
+// 		'roboto-bold': require('./assets/Fonts/Roboto-Bold.ttf')
+// 	})
+// }
+
+// if (!loading) {
+// 	return (
+// 		<AppLoading startAsync={loadApplication} onFinish={() => setLoading(true)} />
+// 	)
+// }
+
+// useEffect(() => {
+// 	async function loadApplication() {
+// 		try {
+// 			await Font.loadAsync({
+// 				'roboto-regular': require('./assets/Fonts/Roboto-Regular.ttf'),
+// 				'roboto-bold': require('./assets/Fonts/Roboto-Bold.ttf')
+// 			})
+// 			await new Promise(resolve => setTimeout(resolve, 2000));
+// 		} catch (e) {
+// 			console.warn(e);
+// 		} finally {
+// 			setLoading(true)
+// 		}
+// 	}
+// 	loadApplication();
+// }, []);
