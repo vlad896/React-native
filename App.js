@@ -6,6 +6,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { useCallback, useEffect, useState } from "react";
 import { MainScreen } from "./app/screens/MainScreen";
 import { TodoScreen } from "./app/screens/TodoScreen";
+import { THEME } from './app/theme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -99,7 +100,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
 	container: {
-		paddingHorizontal: 30,
+		paddingHorizontal: THEME.PADDING_HORIZONTAL,
 		paddingVertical: 20,
 	},
 });
