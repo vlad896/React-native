@@ -1,3 +1,6 @@
 export const THEME = {
-	DANGER_COLOR: '#f00'
+	DANGER_COLOR: '#e53935',
+	GREY_COLOR: '#757575',
+	MAIN_COLOR: '#3949ab',
+	TEXT_COLOR: '#fff'
 }
