@@ -5,28 +5,10 @@ import { Todo } from "../components/Todo";
 import { THEME } from '../theme';
 
 export const MainScreen = ({ onSubmit, onRemove, todos, onOpen }) => {
-
-
-	// const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width - THEME.PADDING_HORIZONTAL * 2)
-
-	// useEffect(() => {
-	// 	const update = () => {
-	// 		const width = Dimensions.get('window').width - THEME.PADDING_HORIZONTAL * 2
-	// 		setDeviceWidth(width)
-	// 	}
-	// 	Dimensions.addEventListener('change', update)
-
-	// 	return () =>
-	// 		update.remove();
-	// })
-
-
 	return (
 		<View>
 			<AddTodo onSubmit={onSubmit} />
 			{todos.length !== 0 ? (
-
-
 				<FlatList
 					keyExtractor={(item) => item.id.toString()}
 					data={todos}
@@ -57,3 +39,16 @@ const styles = StyleSheet.create({
 		resizeMode: 'contain',
 	}
 });
+
+// const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width - THEME.PADDING_HORIZONTAL * 2)
+
+// useEffect(() => {
+// 	const update = () => {
+// 		const width = Dimensions.get('window').width - THEME.PADDING_HORIZONTAL * 2
+// 		setDeviceWidth(width)
+// 	}
+// 	Dimensions.addEventListener('change', update)
+
+// 	return () =>
+// 		update.remove();
+// })

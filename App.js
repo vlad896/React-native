@@ -1,21 +1,16 @@
-import { StyleSheet, View, Alert } from "react-native";
-import * as Font from 'expo-font'
+import { View } from "react-native";
 import { useFonts } from 'expo-font';
-import { Navbar } from "./app/components/Navbar";
 import * as SplashScreen from 'expo-splash-screen'
-import { useCallback, useEffect, useState } from "react";
-import { MainScreen } from "./app/screens/MainScreen";
-import { TodoScreen } from "./app/screens/TodoScreen";
-import { THEME } from './app/theme';
+import { useCallback } from "react";
+
+import { MainLayout } from './app/MainLayout';
+import { TodoState } from './app/context/todo/TodoState';
+
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-	const [todos, setTodos] = useState([
-		{ id: "1", title: "Выучить React Native" },
-		{ id: "2", title: "Написать приложение" },
-	]);
-	const [todoId, setTodoId] = useState(null);
+
 	const [fontsLoaded, fonstError] = useFonts({
 		'roboto-regular': require('./assets/Fonts/Roboto-Regular.ttf'),
 		'roboto-bold': require('./assets/Fonts/Roboto-Bold.ttf')
@@ -30,80 +25,15 @@ export default function App() {
 	if (!fontsLoaded && !fonstError) {
 		return null
 	}
-	const addTodo = (title) => {
-		setTodos((prev) => [
-			...prev,
-			{
-				id: Date.now().toString(),
-				title: title,
-			},
-		]);
-	};
-
-	const removeTodo = (id) => {
-		const todo = todos.find((t) => t.id === id);
-		Alert.alert(
-			"Удаление элемента",
-			`Вы уверены что ходите удалить "${todo.title}"`,
-			[
-				{
-					text: "Cancel",
-					style: "cancel",
-				},
-				{
-					text: "Удаление",
-					style: "destructive",
-					onPress: () => {
-						setTodoId(null);
-						setTodos((prev) => prev.filter((todo) => todo.id !== id));
-					},
-				},
-			],
-			{ cancelable: false }
-		);
-	};
-
-	const updateTodo = (id, title) => {
-		setTodos(old => old.map(todo => {
-			if (todo.id === id) {
-				todo.title = title
-			}
-			return todo
-		}))
-	}
-
 	return (
 		<View onLayout={onLoyoutRootView}>
-			<Navbar title="ToDo App" />
-			<View style={styles.container}>
-				{todoId !== null ? (
-					<TodoScreen
-						goBack={() => setTodoId(null)}
-						onRemove={removeTodo}
-						todo={todos.find((todo) => todo.id === todoId)}
-						onSave={updateTodo}
-					/>
-				) : (
-					<MainScreen
-						onSubmit={addTodo}
-						todos={todos}
-						onRemove={removeTodo}
-						onOpen={(id) => {
-							setTodoId(id);
-						}}
-					/>
-				)}
-			</View>
+			<TodoState>
+				<MainLayout />
+			</TodoState>
 		</View>
 	);
 }
 
-const styles = StyleSheet.create({
-	container: {
-		paddingHorizontal: THEME.PADDING_HORIZONTAL,
-		paddingVertical: 20,
-	},
-});
 
 
 
