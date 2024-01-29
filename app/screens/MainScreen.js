@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, StyleSheet, FlatList, Image, Dimensions } from "react-native";
 import { AddTodo } from "../components/AddTodo";
 import { Todo } from "../components/Todo";
 import { THEME } from '../theme';
+import { TodoContext } from '../context/todo/todoContext';
+import { ScreenContext } from '../context/screen/screenContext';
 
-export const MainScreen = ({ onSubmit, onRemove, todos, onOpen }) => {
+export const MainScreen = () => {
+
+	const { addTodo, todos, removeTodo, updateTodo } = useContext(TodoContext)
+	const { change } = useContext(ScreenContext)
+
 	return (
 		<View>
-			<AddTodo onSubmit={onSubmit} />
+			<AddTodo onSubmit={addTodo} />
 			{todos.length !== 0 ? (
 				<FlatList
 					keyExtractor={(item) => item.id.toString()}
 					data={todos}
 					renderItem={({ item }) => (
-						<Todo todo={item} onRemove={onRemove} onOpen={onOpen} />
+						<Todo todo={item} onRemove={removeTodo} onOpen={change} />
 					)}
 				/>
 

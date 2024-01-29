@@ -8,8 +8,37 @@ import { TodoContext } from './context/todo/todoContext';
 import { ScreenContext } from './context/screen/screenContext';
 
 export const MainLayout = () => {
-	const { todos, addTodo, removeTodo, updateTodo } = useContext(TodoContext)
-	const { todoId, change } = useContext(ScreenContext)
+	const { todoId } = useContext(ScreenContext)
+	return (
+		<View>
+			<Navbar title="ToDo App" />
+			<View style={styles.container}>
+				{todoId ? <TodoScreen /> : <MainScreen/>}
+			</View>
+		</View>
+	)
+}
+const styles = StyleSheet.create({
+	container: {
+		paddingHorizontal: THEME.PADDING_HORIZONTAL,
+		paddingVertical: 20,
+	},
+});
+
+
+	// let content = (
+	// 	<MainScreen/>
+	// )
+
+	// if (todoId) {
+	// 	content = (
+	// 		<TodoScreen
+		
+	// 		/>
+	// 	)
+	// }
+
+
 	// const [todos, setTodos] = useState([]);
 	//const [todoId, setTodoId] = useState(null);
 
@@ -51,40 +80,3 @@ export const MainLayout = () => {
 	// 		return todo
 	// 	}))
 	// }
-
-	let content = (
-		<MainScreen
-			onSubmit={addTodo}
-			todos={todos}
-			onRemove={removeTodo}
-			onOpen={change}
-		/>
-	)
-
-	if (todoId) {
-		const selectTodo = todos.find((todo) => todo.id === todoId)
-		content = (
-			<TodoScreen
-				goBack={() => change(null)}
-				onRemove={removeTodo}
-				todo={selectTodo}
-				onSave={updateTodo}
-			/>
-		)
-	}
-
-	return (
-		<View>
-			<Navbar title="ToDo App" />
-			<View style={styles.container}>
-				{content}
-			</View>
-		</View>
-	)
-}
-const styles = StyleSheet.create({
-	container: {
-		paddingHorizontal: THEME.PADDING_HORIZONTAL,
-		paddingVertical: 20,
-	},
-});
