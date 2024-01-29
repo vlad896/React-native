@@ -3,13 +3,15 @@ import { View, StyleSheet } from 'react-native'
 import { Navbar } from './components/Navbar'
 import { THEME } from './theme'
 import { MainScreen } from "./screens/MainScreen";
-import { TodoScreen } from "./screens/TodoScreen";
+import { TodoScreen } from './screens/TodoScreen'
 import { TodoContext } from './context/todo/todoContext';
+import { ScreenContext } from './context/screen/screenContext';
 
 export const MainLayout = () => {
 	const { todos, addTodo, removeTodo, updateTodo } = useContext(TodoContext)
+	const { todoId, change } = useContext(ScreenContext)
 	// const [todos, setTodos] = useState([]);
-	const [todoId, setTodoId] = useState(null);
+	//const [todoId, setTodoId] = useState(null);
 
 	// const addTodo = (title) => {
 	// 	setTodos((prev) => [
@@ -55,11 +57,7 @@ export const MainLayout = () => {
 			onSubmit={addTodo}
 			todos={todos}
 			onRemove={removeTodo}
-			onOpen={
-				(id) => {
-					setTodoId(id);
-				}
-			}
+			onOpen={change}
 		/>
 	)
 
@@ -67,7 +65,7 @@ export const MainLayout = () => {
 		const selectTodo = todos.find((todo) => todo.id === todoId)
 		content = (
 			<TodoScreen
-				goBack={() => setTodoId(null)}
+				goBack={() => change(null)}
 				onRemove={removeTodo}
 				todo={selectTodo}
 				onSave={updateTodo}

@@ -5,7 +5,7 @@ import { useCallback } from "react";
 
 import { MainLayout } from './app/MainLayout';
 import { TodoState } from './app/context/todo/TodoState';
-
+import { ScreenState } from './app/context/screen/ScreenState';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,9 +27,11 @@ export default function App() {
 	}
 	return (
 		<View onLayout={onLoyoutRootView}>
-			<TodoState>
-				<MainLayout />
-			</TodoState>
+			<ScreenState>
+				<TodoState>
+					<MainLayout />
+				</TodoState>
+			</ScreenState>
 		</View>
 	);
 }
