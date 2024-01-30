@@ -1,9 +1,19 @@
 import React, { useReducer, useContext } from 'react'
+import { Alert } from 'react-native'
 import { TodoContext } from './todoContext'
 import { todoReducer } from './todoReducer'
-import { ADD_TODO, CLEAR_ERROR, HIDE_LOADER, REMOVE_TODO, SHOW_ERROR, SHOW_LOADER, UPD_TODO } from '../types'
+import {
+	ADD_TODO,
+	REMOVE_TODO,
+	UPD_TODO,
+	SHOW_ERROR,
+	HIDE_LOADER,
+	SHOW_LOADER,
+	CLEAR_ERROR,
+	FETCH_TODOS,
+} from '../types'
 import { ScreenContext } from '../screen/screenContext'
-import { Alert } from 'react-native'
+
 export const TodoState = ({ children }) => {
 	const initialState = {
 		todos: [],
@@ -13,7 +23,15 @@ export const TodoState = ({ children }) => {
 	const { change } = useContext(ScreenContext)
 	const [state, dispatch] = useReducer(todoReducer, initialState)
 
-	const addTodo = title => dispatch({ type: ADD_TODO, title: title })
+	const addTodo = async title => {
+		const response = await fetch('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json', {
+			method: 'POST',
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify({ title })
+		})
+		const data = await response.json();//это тоже Promise
+		dispatch({ type: ADD_TODO, title: title, id: data.name })
+	}
 
 	const removeTodo = (id) => {
 		const todo = state.todos.find(t => t.id === id)
@@ -36,7 +54,17 @@ export const TodoState = ({ children }) => {
 			],
 			{ cancelable: false }
 		);
-
+	}
+	const fetchTodo = async () => {
+		const response = await fetch('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
+			{
+				method: 'GET',
+				headers: { 'Content-type': 'application/json' }
+			})
+		const data = await response.json();
+		const todosArray = Object.keys(data).map(key => ({ ...data[key], id: key }))
+		console.log('DATA', todosArray)
+		setTimeout(() => dispatch({ type: FETCH_TODOS, todosArray }), 5000)
 	}
 
 	const updateTodo = (id, title) => dispatch({ type: UPD_TODO, id, title })
@@ -53,6 +81,9 @@ export const TodoState = ({ children }) => {
 				addTodo,
 				removeTodo,
 				updateTodo,
+				fetchTodo,
+				loading: state.loading,
+				error: state.error
 			}}>
 			{children}
 		</TodoContext.Provider>
