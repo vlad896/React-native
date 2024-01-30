@@ -24,6 +24,11 @@ export const EditModal = ({ visible, onClose, todo, onSave }) => {
 			onSave(newTodo);
 		}
 	};
+
+	const cancelHandler = () => {
+		setNewTodo(todo)
+		onClose()
+	}
 	return (
 		<Modal visible={visible} animationType="slide" transparent={false}>
 			<View style={styles.wrap}>
@@ -39,7 +44,7 @@ export const EditModal = ({ visible, onClose, todo, onSave }) => {
 				<View style={styles.button}>
 					<AppButton
 
-						onPress={onClose}
+						onPress={cancelHandler}
 						color={THEME.DANGER_COLOR}
 					>
 						Отменить
