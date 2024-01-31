@@ -5,6 +5,7 @@ import { Todo } from "../components/Todo";
 import { THEME } from '../theme';
 import { TodoContext } from '../context/todo/todoContext';
 import { ScreenContext } from '../context/screen/screenContext';
+import { AppLoader } from '../ui/AppLoader'
 
 export const MainScreen = () => {
 
@@ -17,6 +18,10 @@ export const MainScreen = () => {
 		loadTodos()
 	}, [])
 
+	if (loading) {
+		return <AppLoader />
+	}
+
 	let content = (
 		<View>
 			<FlatList
@@ -28,6 +33,7 @@ export const MainScreen = () => {
 			/>
 		</View>
 	)
+
 	if (todos.length === 0) {
 		content = (
 			<View style={styles.ImageW}>
@@ -35,6 +41,8 @@ export const MainScreen = () => {
 			</View>
 		)
 	}
+
+
 
 	return (
 		<View>

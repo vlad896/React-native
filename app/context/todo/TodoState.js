@@ -56,6 +56,7 @@ export const TodoState = ({ children }) => {
 		);
 	}
 	const fetchTodo = async () => {
+		showLoader();
 		const response = await fetch('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
 			{
 				method: 'GET',
@@ -64,7 +65,8 @@ export const TodoState = ({ children }) => {
 		const data = await response.json();
 		const todosArray = Object.keys(data).map(key => ({ ...data[key], id: key }))
 		console.log('DATA', todosArray)
-		setTimeout(() => dispatch({ type: FETCH_TODOS, todosArray }), 5000)
+		dispatch({ type: FETCH_TODOS, todosArray })
+		hideLoader();
 	}
 
 	const updateTodo = (id, title) => dispatch({ type: UPD_TODO, id, title })
@@ -78,12 +80,13 @@ export const TodoState = ({ children }) => {
 		<TodoContext.Provider
 			value={{
 				todos: state.todos,
+				loading: state.loading,
+				error: state.error,
 				addTodo,
 				removeTodo,
 				updateTodo,
 				fetchTodo,
-				loading: state.loading,
-				error: state.error
+
 			}}>
 			{children}
 		</TodoContext.Provider>
