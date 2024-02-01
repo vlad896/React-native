@@ -13,6 +13,7 @@ import {
 	FETCH_TODOS,
 } from '../types'
 import { ScreenContext } from '../screen/screenContext'
+import { Http } from '../../http'
 
 export const TodoState = ({ children }) => {
 	const initialState = {
@@ -24,12 +25,16 @@ export const TodoState = ({ children }) => {
 	const [state, dispatch] = useReducer(todoReducer, initialState)
 
 	const addTodo = async title => {
-		const response = await fetch('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json', {
-			method: 'POST',
-			headers: { 'Content-type': 'application/json' },
-			body: JSON.stringify({ title })
-		})
-		const data = await response.json();//это тоже Promise
+		// Http.get('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json')
+		// const response = await fetch('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json', {
+		// 	method: 'POST',
+		// 	headers: { 'Content-type': 'application/json' },
+		// 	body: JSON.stringify({ title })
+		// })
+		// const data = await response.json();//это тоже Promise
+		const data = await Http.post('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
+			{ title }
+		)
 		dispatch({ type: ADD_TODO, title: title, id: data.name })
 	}
 
