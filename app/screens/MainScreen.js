@@ -6,6 +6,8 @@ import { THEME } from '../theme';
 import { TodoContext } from '../context/todo/todoContext';
 import { ScreenContext } from '../context/screen/screenContext';
 import { AppLoader } from '../ui/AppLoader'
+import { AppText } from '../ui/AppText';
+import { AppButton } from '../ui/AppButton';
 
 export const MainScreen = () => {
 
@@ -20,6 +22,17 @@ export const MainScreen = () => {
 
 	if (loading) {
 		return <AppLoader />
+	}
+
+	if (error) {
+		return <View style={styles.center}>
+			<AppText style={styles.error}>
+				{error}
+			</AppText>
+			<AppButton color={THEME.MAIN_COLOR} onPress={loadTodos}>
+				Повторить
+			</AppButton>
+		</View>
 	}
 
 	let content = (
@@ -63,6 +76,14 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: "100%",
 		resizeMode: 'contain',
+	},
+	center: {
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	error: {
+		fontSize: 20,
+		color: THEME.DANGER_COLOR
 	}
 });
 

@@ -46,30 +46,64 @@ export const TodoState = ({ children }) => {
 				{
 					text: "Удаление",
 					style: "destructive",
-					onPress: () => {
+					onPress: async () => {
 						change(null)
+						await fetch(`https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`,
+							{
+								method: 'DELETE',
+								headers: { 'Content-type': 'application/json' }
+							}
+						)
 						dispatch({ type: REMOVE_TODO, id })
 					},
 				},
 			],
 			{ cancelable: false }
 		);
+
 	}
 	const fetchTodo = async () => {
 		showLoader();
-		const response = await fetch('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
-			{
-				method: 'GET',
-				headers: { 'Content-type': 'application/json' }
-			})
-		const data = await response.json();
-		const todosArray = Object.keys(data).map(key => ({ ...data[key], id: key }))
-		console.log('DATA', todosArray)
-		dispatch({ type: FETCH_TODOS, todosArray })
-		hideLoader();
+		clearError();
+
+		try {
+			const response = await fetch('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
+				{
+					method: 'GET',
+					headers: { 'Content-type': 'application/json' }
+				})
+			const data = await response.json();
+			const todosArray = Object.keys(data).map(key => ({ ...data[key], id: key }))
+			console.log('DATA', todosArray)
+			dispatch({ type: FETCH_TODOS, todosArray })
+
+		} catch (error) {
+			showError('УПС...')
+			console.log(error)
+
+		} finally {
+			hideLoader();
+		}
 	}
 
-	const updateTodo = (id, title) => dispatch({ type: UPD_TODO, id, title })
+	const updateTodo = async (id, title) => {
+		showLoader();
+		clearError();
+		try {
+			await fetch(`https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`, {
+				body: JSON.stringify({ title }),
+				method: 'PATCH',
+				headers: { 'Content-type': 'application/json' }
+			})
+		} catch (error) {
+			showError('УПС...')
+			console.log(error)
+		} finally {
+			hideLoader();
+		}
+
+		dispatch({ type: UPD_TODO, id, title })
+	}
 
 	const showLoader = () => dispatch({ type: SHOW_LOADER })
 	const hideLoader = () => dispatch({ type: HIDE_LOADER })

@@ -10,7 +10,7 @@ import { ScreenContext } from './context/screen/screenContext';
 export const MainLayout = () => {
 	const { todoId } = useContext(ScreenContext)
 	return (
-		<View>
+		<View style={{}}>
 			<Navbar title="ToDo App" />
 			<View style={styles.container}>
 				{todoId ? <TodoScreen /> : <MainScreen/>}
