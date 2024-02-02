@@ -40,11 +40,12 @@ export const MainScreen = () => {
 		<View>
 			<FlatList
 				keyExtractor={item => item.id.toString()}
+				contentContainerStyle={{ flexGrow: 1 }}
 				data={todos}
 				renderItem={({ item }) => (
 					<Todo todo={item} onRemove={removeTodo} onOpen={change} />
 				)}
-			/>
+				ListFooterComponent={<View style={{ height: 400 }} />} />
 		</View>
 	)
 
