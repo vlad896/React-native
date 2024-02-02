@@ -6,6 +6,7 @@ export class Http {
 			return await request(url)
 		} catch (e) {
 			console.log(e);
+			throw (e)
 		}
 	}
 
@@ -30,6 +31,7 @@ export class Http {
 			return await request(url, 'PATCH', data)
 		} catch (error) {
 			console.log(error)
+			throw (e)
 		}
 	}
 

@@ -53,12 +53,8 @@ export const TodoState = ({ children }) => {
 					style: "destructive",
 					onPress: async () => {
 						change(null)
-						await fetch(`https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`,
-							{
-								method: 'DELETE',
-								headers: { 'Content-type': 'application/json' }
-							}
-						)
+
+						await Http.delete(`https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`)
 						dispatch({ type: REMOVE_TODO, id })
 					},
 				},
@@ -71,13 +67,10 @@ export const TodoState = ({ children }) => {
 		showLoader();
 		clearError();
 
+
 		try {
-			const response = await fetch('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
-				{
-					method: 'GET',
-					headers: { 'Content-type': 'application/json' }
-				})
-			const data = await response.json();
+
+			const data = await Http.get('https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos.json')
 			const todosArray = Object.keys(data).map(key => ({ ...data[key], id: key }))
 			console.log('DATA', todosArray)
 			dispatch({ type: FETCH_TODOS, todosArray })
@@ -95,11 +88,8 @@ export const TodoState = ({ children }) => {
 		showLoader();
 		clearError();
 		try {
-			await fetch(`https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`, {
-				body: JSON.stringify({ title }),
-				method: 'PATCH',
-				headers: { 'Content-type': 'application/json' }
-			})
+			await Http.patch(`https://react-native-todo-95be5-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`, { title })
+
 		} catch (error) {
 			showError('УПС...')
 			console.log(error)

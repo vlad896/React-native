@@ -9,6 +9,7 @@ import { AppLoader } from '../ui/AppLoader'
 import { AppText } from '../ui/AppText';
 import { AppButton } from '../ui/AppButton';
 
+
 export const MainScreen = () => {
 
 	const { addTodo, todos, removeTodo, fetchTodo, loading, error } = useContext(TodoContext)
@@ -38,7 +39,7 @@ export const MainScreen = () => {
 	let content = (
 		<View>
 			<FlatList
-				keyExtractor={(item) => item.id.toString()}
+				keyExtractor={item => item.id.toString()}
 				data={todos}
 				renderItem={({ item }) => (
 					<Todo todo={item} onRemove={removeTodo} onOpen={change} />
@@ -58,6 +59,7 @@ export const MainScreen = () => {
 
 
 	return (
+
 		<View>
 			<AddTodo onSubmit={addTodo} />
 			{content}
